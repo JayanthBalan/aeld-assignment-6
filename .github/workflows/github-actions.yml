@@ -27,7 +27,7 @@ jobs:
               docker run --rm \
                 -v ${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE} \
                 -v /home/jayanth/CUB_EmbedLinux/Course2/aeld-assignment-6/poky:/persistent-poky \
-                -v /home/jayanth/CUB_EmbedLinux/Course2/aeld-assignment-6/build:/persistent-build \
+                -v /home/jayanth/CUB_EmbedLinux/Course2/aeld-assignment-6/build:/home/jayanth/CUB_EmbedLinux/Course2/aeld-assignment-6/build \
                 -e SKIP_BUILD=1 \
                 -e DO_VALIDATE=1 \
                 -e POKY_DIR=/persistent-poky \

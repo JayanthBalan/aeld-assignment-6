@@ -1,40 +1,41 @@
 name: assignment-test
+
 on:
     push:
         tags-ignore:
             - '*'
         branches:
             - '*'
+
 jobs:
-      full-test:
+    full-test:
         runs-on: self-hosted
+
         steps:
           - uses: actions/checkout@v3
             with:
               clean: false
               submodules: 'recursive'
+
           - uses: webfactory/ssh-agent@v0.5.4
             with:
-                 ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          - name: Run build
-            timeout-minutes: 600
+              ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+          - name: Run full test
+            timeout-minutes: 15
             run: |
-               docker run --rm \
-                 -v $SSH_AUTH_SOCK:/ssh-agent -e SSH_AUTH_SOCK=/ssh-agent \
-                 -e GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" \
-                 -v ${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE} \
-                 cuaesd/aesd-autotest:24-assignment6-yocto \
-                 --workdir=${GITHUB_WORKSPACE} \
-                 ./build.sh
+              docker run --rm \
+                -v ${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE} \
+                -v /home/jayanth/CUB_EmbedLinux/Course2/aeld-assignment-6/poky:/persistent-poky \
+                -e SKIP_BUILD=1 \
+                -e DO_VALIDATE=1 \
+                -e POKY_DIR=/persistent-poky \
+                cuaesd/aesd-autotest:assignment6-yocto \
+                --workdir=${GITHUB_WORKSPACE} \
+                ./full-test.sh
+
           - name: Cleanup
             if: always()
             run: |
               ssh-add -D
-          - name: Run full test
-            timeout-minutes: 15
-            run: |
-               docker run --rm \
-                 -v ${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE} \
-                 cuaesd/aesd-autotest:assignment6-yocto \
-                 --workdir=${GITHUB_WORKSPACE} \
-                 ./full-test.sh
+              

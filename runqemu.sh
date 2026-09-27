@@ -8,4 +8,4 @@ source "${POKY_DIR}/oe-init-build-env" "${BUILD_DIR}"
 
 export QB_SLIRP_OPT="-netdev user,id=net0,hostfwd=tcp::10022-:22,hostfwd=tcp::9000-:9000"
 
-runqemu "${BUILD_DIR}/tmp/deploy/images/qemuarm64" slirp nographic
+runqemu "${BUILDDIR}/tmp/deploy/images/qemuarm64/"*.qemuboot.conf slirp nographic
